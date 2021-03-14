@@ -6,6 +6,8 @@ import os
 import requests
 import twitter
 
+# TODO: fix videos with sound not being detected.
+
 
 def get_api():
     url_input = Path("tokens.json")
@@ -45,7 +47,7 @@ def open_input():
     return json.loads(data)
 
 
-def GetStatusInfoFromURL(url: str):
+def get_status_info_from_url(url: str):
     split_url = url.split("/")
     status_id = split_url.pop(len(split_url) - 1)
     user_id = split_url.pop(len(split_url) - 2)
@@ -53,7 +55,7 @@ def GetStatusInfoFromURL(url: str):
 
 
 def download_images(url: str):
-    current_status = GetStatusInfoFromURL(url)
+    current_status = get_status_info_from_url(url)
 
     try:
         tweet_json = json.loads(api.GetStatus(current_status[1]).AsJsonString())
@@ -95,10 +97,10 @@ def download_images(url: str):
 def get_videos():
     url = "https://twitter.com/Zdenalie/status/1248908614103793664"
 
-    current_status = GetStatusInfoFromURL(url)
+    current_status = get_status_info_from_url(url)
     tweet_json = json.loads(api.GetStatus(current_status[1]).AsJsonString())
     new_url = tweet_json["urls"][0]["expanded_url"]
-    new_status = GetStatusInfoFromURL(new_url)
+    new_status = get_status_info_from_url(new_url)
     new_tweet_json = json.loads(api.GetStatus(new_status[1]).AsJsonString())
 
     print(json.dumps(new_tweet_json, indent=4))
