@@ -1,0 +1,9 @@
+{
+    "__info__": "For this file to work, it has to be renamed 'tokens.json'.",
+    "__info__": "Enter your app tokens in the place of the placeholders below.",
+
+    "consumer_key": "0000000000000000000000000",
+    "consumer_secret": "00000000000000000000000000000000000000000000000000",
+    "access_token_key": "0000000000-000000000000000000000000000000000000000",
+    "access_token_secret": "000000000000000000000000000000000000000000000"
+}
