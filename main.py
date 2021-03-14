@@ -73,15 +73,21 @@ def download_images(url: str):
 
         i = 0
         for m in tweet_media:
-            tweet_image = m["media_url_https"]
             author_name = f"{current_status[0]}_{current_status[1]}_0{str(i).zfill(1)}"
-            r = requests.get(tweet_image)
 
-            with open(f"{author_name}.png", 'wb') as f:
-                f.write(r.content)
+            if "video_info" in m:
+                tweet_media = m["video_info"]["variants"][0]["url"]
+            else:
+                tweet_media = m["media_url_https"]
 
-            print(f"{tweet_image}, {author_name}")
-            logger.append(f"{tweet_image}, {author_name}")
+            media = requests.get(tweet_media)
+            extension = str(tweet_media)[-3:]
+
+            with open(f"{author_name}.{extension}", 'wb') as f:
+                f.write(media.content)
+
+            print(f"{tweet_media}, {author_name}")
+            logger.append(f"{tweet_media}, {author_name}")
             url_history.append(url)
             i = i + 1
 
