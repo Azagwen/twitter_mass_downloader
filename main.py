@@ -7,6 +7,10 @@ import requests
 import twitter
 
 # TODO: fix videos with sound not being detected.
+# sample : https://twitter.com/YukaSlz/status/1371195200236834816
+
+# TODO: fix some videos not encoding properly
+
 
 
 def get_api():
@@ -92,18 +96,6 @@ def download_images(url: str):
             logger.append(f"{tweet_media}, {author_name}")
             url_history.append(url)
             i = i + 1
-
-
-def get_videos():
-    url = "https://twitter.com/Zdenalie/status/1248908614103793664"
-
-    current_status = get_status_info_from_url(url)
-    tweet_json = json.loads(api.GetStatus(current_status[1]).AsJsonString())
-    new_url = tweet_json["urls"][0]["expanded_url"]
-    new_status = get_status_info_from_url(new_url)
-    new_tweet_json = json.loads(api.GetStatus(new_status[1]).AsJsonString())
-
-    print(json.dumps(new_tweet_json, indent=4))
 
 
 def multi_download_images(url_list):
