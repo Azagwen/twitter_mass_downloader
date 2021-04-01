@@ -9,11 +9,6 @@ import twitter
 # TODO: fix videos with sound not being detected (?).
 # sample : https://twitter.com/YukaSlz/status/1371195200236834816
 
-# TODO: investigate images not being found in some tweets
-# sample : https://twitter.com/Junka_art/status/1372247107940147210
-# sample : https://twitter.com/TopsieTurvy_/status/1372928488802553856
-# sample : https://twitter.com/XaGueuzav/status/1372953005520211970
-
 # TODO: fix some videos not encoding properly
 # Issue root : proxy videos
 # possible solution : https://stackoverflow.com/questions/32145166/get-video-from-tweet-using-twitter-api

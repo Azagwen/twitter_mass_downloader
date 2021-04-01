@@ -13,9 +13,12 @@ ___
 This app takes an input in the form of `input.json`, this input file is formated to allow for sub-folder creation as easily as possible. It is currently formated as follows : 
 ```
 {
-    "sub_folder__00": "url"
-    "sub_folder__01": "url"
-    "sub_folder__03": "url"
+    "sub_folder/00": "url"
+    "sub_folder/01": "url"
+    "sub_folder/03": "url"
+    "sub_folder/a": "url"
+    "sub_folder/b": "url"
+    "sub_folder/z": "url"
     "another_sub_folder": "url"
     "__none__": "url"
     "": "url"
@@ -24,7 +27,7 @@ This app takes an input in the form of `input.json`, this input file is formated
 
 #### Further explanations:
 
-Here the keys are used as sub-folder names, note that anything after the double "_" will be ignored, as it is used to distinct "indexes" to avoid keys overriding each others.
+Here the json keys are used as sub-folder names, **note that anything after `/` will be ignored, as it is used to distinct "indexes" to avoid keys overriding each others.**
 
 The keys `"__none__"` and `""` will be considered as "no sub-folder specified", creating the images in the `output/` folder itself, to put multiple images in a null sub-folder, `"__none__"` will accepts indexes, so it can be used as shown below to download multiple files in the root of `output/`: 
 
