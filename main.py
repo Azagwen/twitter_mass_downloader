@@ -6,10 +6,7 @@ import os
 import requests
 import twitter
 
-# TODO: fix videos with sound not being detected (?).
-# sample : https://twitter.com/YukaSlz/status/1371195200236834816
-
-# TODO: fix some videos not encoding properly
+# TODO: fix externally hosted videos being incorrectly encoded
 # Issue root : proxy videos
 # possible solution : https://stackoverflow.com/questions/32145166/get-video-from-tweet-using-twitter-api
 
@@ -126,7 +123,17 @@ def download_images(input_data):
                 tweet_media = m["media_url_https"]
 
             media = requests.get(tweet_media)
-            extension = str(tweet_media)[-3:]
+
+            if str(tweet_media).__contains__(".jpg"):
+                extension = "jpg"
+            elif str(tweet_media).__contains__(".png"):
+                extension = "png"
+            elif str(tweet_media).__contains__(".mp4"):
+                extension = "mp4"
+            elif str(tweet_media).__contains__(".gif"):
+                extension = "gif"
+            else:
+                extension = "txt"
 
             with open(f"{full_path}/{author_name}.{extension}", 'wb') as f:
                 f.write(media.content)
@@ -175,7 +182,7 @@ def write_logs():
     with open(f"{path}/log_{now}.json", "w") as f:
         f.write(json.dumps(logger, indent=4))
 
-    if len(fail_logger) > 0:
+    if fail_logger != "[]":
         with open(f"{path}/fails_log_{now}.json", "w") as f:
             f.write(json.dumps(fail_logger, indent=4))
 
@@ -184,9 +191,9 @@ def write_logs():
 
 
 print(json.dumps(open_input(), indent=4))
-# create_directories()
+create_directories()
 multi_download_images(open_input())
-# write_logs()
+write_logs()
 
 
 
