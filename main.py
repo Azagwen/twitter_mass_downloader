@@ -6,7 +6,7 @@ import os
 import requests
 import twitter
 
-# TODO: fix videos with sound not being detected.
+# TODO: fix videos with sound not being detected (?).
 # sample : https://twitter.com/YukaSlz/status/1371195200236834816
 
 # TODO: investigate images not being found in some tweets
@@ -15,6 +15,7 @@ import twitter
 # sample : https://twitter.com/XaGueuzav/status/1372953005520211970
 
 # TODO: fix some videos not encoding properly
+# Issue root : proxy videos
 # possible solution : https://stackoverflow.com/questions/32145166/get-video-from-tweet-using-twitter-api
 
 
@@ -45,6 +46,7 @@ def get_status_info_from_url(url: str):
 
 
 api = get_api()
+api.tweet_mode = "extended"
 logger = []
 fail_logger = []
 url_history = []
@@ -89,15 +91,17 @@ def download_images(input_data):
 
     current_status = get_status_info_from_url(url)
     path = Path("output")
-    if target_folder != "" or target_folder.__contains__("__none__"):
-        if target_folder.__contains__("__"):
-            temp_path = target_folder.split("__")
+    if not target_folder.__contains__("__none__") and target_folder is not "":
+        if target_folder.__contains__("/"):
+            temp_path = target_folder.split("/")
             temp_path = temp_path[0]
             full_path = f"{path}/{temp_path}"
         else:
             full_path = f"{path}/{target_folder}"
-
-        create_directory(full_path)
+        create_directory(
+            path=full_path,
+            notice=False
+        )
     else:
         full_path = path
 
@@ -132,7 +136,7 @@ def download_images(input_data):
             with open(f"{full_path}/{author_name}.{extension}", 'wb') as f:
                 f.write(media.content)
 
-            print(f"{tweet_media}, {author_name}")
+            print(f"{(target_folder.split('/'))[0]}/, {tweet_media}, {author_name}")
             logger.append(f"{tweet_media}, {author_name}")
             url_history.append(url)
             i = i + 1
@@ -143,21 +147,30 @@ def multi_download_images(input_data):
         download_images((str(folder), str(url)))
 
 
-def create_directory(path):
+def create_directory(path, notice: bool):
     final_path = Path(path)
 
     try:
         os.mkdir(final_path)
     except FileExistsError:
-        print(f'"{final_path}" already exists, doing nothing.')
+        if notice:
+            print(f'"{final_path}" already exists, doing nothing.')
+        else:
+            pass
 
 
 def create_directories():
     path_output = Path("output")
     path_logs = Path("logs")
 
-    create_directory(path_output)
-    create_directory(path_logs)
+    create_directory(
+        path=path_output,
+        notice=True
+    )
+    create_directory(
+        path=path_logs,
+        notice=True
+    )
 
 
 def write_logs():
@@ -176,9 +189,9 @@ def write_logs():
 
 
 print(json.dumps(open_input(), indent=4))
-create_directories()
+# create_directories()
 multi_download_images(open_input())
-write_logs()
+# write_logs()
 
 
 
