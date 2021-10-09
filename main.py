@@ -6,6 +6,7 @@ import os
 import requests
 import twitter
 
+
 # TODO: fix externally hosted videos being incorrectly encoded
 # Issue root : proxy videos
 # possible solution : https://stackoverflow.com/questions/32145166/get-video-from-tweet-using-twitter-api
@@ -87,85 +88,82 @@ def flatten_folder(current_folder):
         return current_folder
 
 
-def download_images(input_data):
-    current_folder = ""
-    matched = ""
+def download_images_v2(input_data):
     target_folder = input_data[0]
     url = input_data[1]
     folder_list = input_data[2]
+    current_folder = ""
+    matched = ""
     path = Path("output")
 
     for f_id in folder_list:
-        flat_folder = flatten_folder(target_folder)
-
-        if f_id == flat_folder:
+        if f_id == target_folder:
             current_folder = folder_list[f_id]
             matched = f"Matched ( {f_id}: {folder_list[f_id]} ), "
             break
-        else:
-            current_folder = flat_folder
 
-    if target_folder != "folder_list":
-        current_status = get_status_info_from_url(url)
-        if not target_folder.__contains__("__none__") and target_folder != "":
-            full_path = f"{path}/{current_folder}"
-            create_directory(
-                path=full_path,
-                notice=False
-            )
-        else:
-            full_path = path
+    current_status = get_status_info_from_url(url)
+    if not current_folder.__contains__("__none__") and current_folder != "":
+        full_path = f"{path}/{current_folder}"
+        create_directory(
+            path=full_path,
+            notice=False
+        )
+    else:
+        full_path = path
 
-        try:
-            tweet_json = json.loads(api.GetStatus(current_status[1]).AsJsonString())
-        except twitter.TwitterError:
-            print(f"Error encountered with: {url}")
-            fail_logger.append(f"Error encountered with: {url}")
+    try:
+        tweet_json = json.loads(api.GetStatus(current_status[1]).AsJsonString())
+    except twitter.TwitterError:
+        print(f"Error encountered with: {url}")
+        fail_logger.append(f"Error encountered with: {url}")
+        url_history.append(url)
+        return
+
+    if "media" not in tweet_json:
+        print(f"No media found in: {url}")
+        fail_logger.append(f"No media found in: {url}")
+        url_history.append(url)
+        return
+    else:
+        tweet_media = tweet_json["media"]
+
+        i = 0
+        for m in tweet_media:
+            author_name = f"{current_status[0]}_{current_status[1]}_0{str(i).zfill(1)}"
+
+            if "video_info" in m:
+                tweet_media = m["video_info"]["variants"][0]["url"]
+            else:
+                tweet_media = m["media_url_https"]
+
+            media = requests.get(tweet_media)
+
+            if str(tweet_media).__contains__(".jpg"):
+                extension = "jpg"
+            elif str(tweet_media).__contains__(".png"):
+                extension = "png"
+            elif str(tweet_media).__contains__(".mp4"):
+                extension = "mp4"
+            elif str(tweet_media).__contains__(".gif"):
+                extension = "gif"
+            else:
+                extension = "txt"
+
+            with open(f"{full_path}/{author_name}.{extension}", 'wb') as f:
+                f.write(media.content)
+
+            print(f"{matched}{current_folder}/, {tweet_media}, {author_name}")
+            logger.append(f"{tweet_media}, {author_name}")
             url_history.append(url)
-            return
-
-        if "media" not in tweet_json:
-            print(f"No media found in: {url}")
-            fail_logger.append(f"No media found in: {url}")
-            url_history.append(url)
-            return
-        else:
-            tweet_media = tweet_json["media"]
-
-            i = 0
-            for m in tweet_media:
-                author_name = f"{current_status[0]}_{current_status[1]}_0{str(i).zfill(1)}"
-
-                if "video_info" in m:
-                    tweet_media = m["video_info"]["variants"][0]["url"]
-                else:
-                    tweet_media = m["media_url_https"]
-
-                media = requests.get(tweet_media)
-
-                if str(tweet_media).__contains__(".jpg"):
-                    extension = "jpg"
-                elif str(tweet_media).__contains__(".png"):
-                    extension = "png"
-                elif str(tweet_media).__contains__(".mp4"):
-                    extension = "mp4"
-                elif str(tweet_media).__contains__(".gif"):
-                    extension = "gif"
-                else:
-                    extension = "txt"
-
-                with open(f"{full_path}/{author_name}.{extension}", 'wb') as f:
-                    f.write(media.content)
-
-                print(f"{matched}{current_folder}/, {tweet_media}, {author_name}")
-                logger.append(f"{tweet_media}, {author_name}")
-                url_history.append(url)
-                i = i + 1
+            i = i + 1
 
 
 def multi_download_images(input_data):
-    for (folder, url) in input_data.items():
-        download_images((str(folder), str(url), json.loads(str(input_data["folder_list"]).replace("\'", "\""))))
+    for (data) in input_data.items():
+        for (url) in data[1]:
+            if data[0] != "__comment" and data[0] != "folder_list":
+                download_images_v2((str(data[0]), str(url), json.loads(str(input_data["folder_list"]).replace("\'", "\""))))
 
 
 def create_directory(path, notice: bool):
@@ -209,7 +207,7 @@ def write_logs():
         f.write(json.dumps(url_history, indent=4))
 
 
-print(json.dumps(open_input(), indent=4))
+print(json.dumps(open_dev_input(), indent=4))
 create_directories()
-multi_download_images(open_input())
+multi_download_images(open_dev_input())
 write_logs()

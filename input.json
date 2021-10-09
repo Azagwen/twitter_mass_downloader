@@ -1,12 +1,116 @@
 {
-  "outfits__00": "https://twitter.com/YutoZin/status/1374722746706317323",
-  "most_important__00": "https://twitter.com/Grardox/status/1376081624614498305",
-  "__none__00": "https://twitter.com/teatigercafe/status/1376625548030406656",
-  "horny": "https://twitter.com/Dizzyspellss/status/1376323317326483461",
-  "outfits__01": "https://twitter.com/YutoZin/status/1368109144436174854",
-  "outfits__02": "https://twitter.com/YutoZin/status/1357962285889691649",
-  "outfits__03": "https://twitter.com/usagimarumei/status/1376880027703279619",
-  "gif__00": "https://twitter.com/Herb_4280/status/1376458883158274052",
-  "most_important__01": "https://twitter.com/ocatg_/status/1376709868749459460",
-  "__none__01": "https://twitter.com/Kairuiz_/status/1376609543485059085"
+  "__comment": "each_folder_is_an_array",
+
+  "miou5":[
+    "https://twitter.com/zzzHADOzzz/status/1446180010080063491",
+    "https://twitter.com/samdoesarts/status/1446146722296647681",
+    "https://twitter.com/tokuni_naitteba/status/1446099792241704967",
+    "https://twitter.com/mykellpledger/status/1446280893203681281",
+    "https://twitter.com/Inkhandprint/status/1446534584804552706",
+    "https://twitter.com/wmxmw_/status/1446115240865787906",
+    "https://twitter.com/kurii89800727/status/1446429681780027397",
+    "https://twitter.com/mikipinc/status/1446467802550898697"
+  ],
+
+  "pe": [
+    "https://twitter.com/MsAlice651/status/1311309571978215429"
+  ],
+
+  "mimp5": [
+    "https://twitter.com/lstr3s0rt/status/1446212302903074821",
+    "https://twitter.com/Spoiled_Art/status/1446205620781137932",
+    "https://twitter.com/NeutrinoFlavor/status/1446528317767696387",
+    "https://twitter.com/miukumauk/status/1446215769642131457",
+    "https://twitter.com/ressaince_idk/status/1446459461917413378",
+    "https://twitter.com/chibichanga12/status/1446550715665682446"
+  ],
+
+  "to": [
+    "https://twitter.com/t20210325/status/1445797680400121861"
+  ],
+
+  "por":[
+    "https://twitter.com/Porforever/status/1446111915906781212"
+  ],
+
+  "ut": [
+    "https://twitter.com/anatyanman/status/1446486090756485132"
+  ],
+
+  "folder_list": {
+    "alma": "@SkyAlmanacArt",
+    "pop": "popopoka",
+    "por": "porforever",
+    "ri": "(@cptHamburger) Riku",
+    "bun": "(@Fire_Bay) Bell (bunny_witch)",
+    "um": "(@Fire_Bay) Umbra",
+    "ink": "(@Fire_Bay) Ink Witch",
+    "fbm": "@Fire_Bay Misc",
+    "dfm": "@Donut_from_mars",
+    "fro": "@myfroggies",
+    "mur": "@murninatair",
+    "sha": "@mersharki",
+    "umi": "@umino_mari",
+    "pud": "@VanillaPuddingo",
+    "mir": "@Mirkand",
+    "pear": "@Peargor (PEAR哥)",
+    "do": "@Donut_from_mars",
+    "knu": "@Knuxyy",
+    "ka": "@Kaiami",
+    "pik": "@vivalapk",
+    "rip": "@pantsu_ripper",
+    "ha": "@halgalaz",
+    "bo": "@Taco_Sakurambo",
+    "toptu": "@TopsieTurvy_",
+    "bour": "@Bourbunbun",
+    "wa": "@wafferscotch",
+    "mc": "Minecraft",
+    "me": "memes",
+    "ro": "robots",
+    "at": "adventure_time",
+    "to": "tohou",
+    "fu": "funny_stuff",
+    "mimp": "most_important",
+    "mimp2": "most_important_vol2",
+    "mimp3": "most_important_vol3",
+    "mimp4": "most_important_vol4",
+    "mimp5": "most_important_vol5",
+    "miou": "most_important_outfits",
+    "miou2": "most_important_outfits_vol2",
+    "miou3": "most_important_outfits_vol3",
+    "miou4": "most_important_outfits_vol4",
+    "miou5": "most_important_outfits_vol5",
+    "fig": "figures",
+    "cou": "cat_outfits_vol1",
+    "tra": "trans_rights",
+    "ou": "outfits",
+    "ou2": "outfits_vol_2",
+    "ou3": "outfits_vol_3",
+    "ou4": "outfits_vol_4",
+    "pri": "princesses",
+    "ma": "maids",
+    "yu": "yuri_bot",
+    "ga": "gays",
+    "nu": "nuns",
+    "pe": "peach",
+    "mi": "miku",
+    "cre":"creepy",
+    "sm": "sailor_moon",
+    "mm": "madoka_magica",
+    "nge": "Evangelion",
+    "re8": "resident_evil_village",
+    "so": "sonic",
+    "e": "ENA",
+    "sto": "panties_stockings",
+    "fnf": "fnf",
+    "fnaf": "fnaf",
+    "ut": "undertale",
+    "dt": "deltarune",
+    "ddlc": "Doki Doki Literature Club",
+    "em": "emoji_peoples",
+    "vi": "videos",
+    "ho": "horny",
+    "b3d": "blender_art",
+    "3D": "3D_art"
+  }
 }
