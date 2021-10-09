@@ -199,7 +199,7 @@ def write_logs():
         f.write(json.dumps(url_history, indent=4))
 
 
-print(json.dumps(open_dev_input(), indent=4))
+print(json.dumps(open_input(), indent=4))
 create_directories()
-multi_download_images(open_dev_input())
+multi_download_images(open_input())
 write_logs()

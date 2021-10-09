@@ -1,42 +1,6 @@
 {
   "__comment": "each_folder_is_an_array",
 
-  "miou5":[
-    "https://twitter.com/zzzHADOzzz/status/1446180010080063491",
-    "https://twitter.com/samdoesarts/status/1446146722296647681",
-    "https://twitter.com/tokuni_naitteba/status/1446099792241704967",
-    "https://twitter.com/mykellpledger/status/1446280893203681281",
-    "https://twitter.com/Inkhandprint/status/1446534584804552706",
-    "https://twitter.com/wmxmw_/status/1446115240865787906",
-    "https://twitter.com/kurii89800727/status/1446429681780027397",
-    "https://twitter.com/mikipinc/status/1446467802550898697?s=19"
-  ],
-
-  "pe": [
-    "https://twitter.com/MsAlice651/status/1311309571978215429"
-  ],
-
-  "mimp5": [
-    "https://twitter.com/lstr3s0rt/status/1446212302903074821",
-    "https://twitter.com/Spoiled_Art/status/1446205620781137932",
-    "https://twitter.com/NeutrinoFlavor/status/1446528317767696387",
-    "https://twitter.com/miukumauk/status/1446215769642131457",
-    "https://twitter.com/ressaince_idk/status/1446459461917413378",
-    "https://twitter.com/chibichanga12/status/1446550715665682446"
-  ],
-
-  "to": [
-    "https://twitter.com/t20210325/status/1445797680400121861"
-  ],
-
-  "por":[
-    "https://twitter.com/Porforever/status/1446111915906781212"
-  ],
-
-  "ut": [
-    "https://twitter.com/anatyanman/status/1446486090756485132"
-  ],
-
   "folder_list": {
     "alma": "@SkyAlmanacArt",
     "pop": "popopoka",
@@ -46,7 +10,6 @@
     "um": "(@Fire_Bay) Umbra",
     "ink": "(@Fire_Bay) Ink Witch",
     "fbm": "@Fire_Bay Misc",
-    "dfm": "@Donut_from_mars",
     "fro": "@myfroggies",
     "mur": "@murninatair",
     "sha": "@mersharki",
