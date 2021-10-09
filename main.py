@@ -31,18 +31,19 @@ def get_api():
     )
 
 
-def get_status_info_from_url(url: str):
-    split_url = url.split("/")
-    status_id = split_url.pop(len(split_url) - 1)
-    user_id = split_url.pop(len(split_url) - 2)
-    return f"@{user_id}", status_id.split("?")[0]
-
-
+# Define main variables
 api = get_api()
 api.tweet_mode = "extended"
 logger = []
 fail_logger = []
 url_history = []
+
+
+def get_status_info_from_url(url: str):
+    split_url = url.split("/")
+    status_id = split_url.pop(len(split_url) - 1)
+    user_id = split_url.pop(len(split_url) - 2)
+    return f"@{user_id}", status_id.split("?")[0]
 
 
 def open_input():
