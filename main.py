@@ -35,7 +35,7 @@ def get_status_info_from_url(url: str):
     split_url = url.split("/")
     status_id = split_url.pop(len(split_url) - 1)
     user_id = split_url.pop(len(split_url) - 2)
-    return f"@{user_id}", status_id
+    return f"@{user_id}", status_id.split("?")[0]
 
 
 api = get_api()
@@ -76,16 +76,6 @@ def get_folders_in_input():
 
     for (folder, url) in json_file.items():
         return str(folder), str(url)
-
-
-def flatten_folder(current_folder):
-    if current_folder.__contains__("/"):
-        temp_path = current_folder.split("/")
-        temp_path = temp_path[0]
-
-        return temp_path
-    else:
-        return current_folder
 
 
 def download_images_v2(input_data):
@@ -163,7 +153,8 @@ def multi_download_images(input_data):
     for (data) in input_data.items():
         for (url) in data[1]:
             if data[0] != "__comment" and data[0] != "folder_list":
-                download_images_v2((str(data[0]), str(url), json.loads(str(input_data["folder_list"]).replace("\'", "\""))))
+                folder_list = json.loads(str(input_data["folder_list"]).replace("\'", "\""))
+                download_images_v2((str(data[0]), str(url), folder_list))
 
 
 def create_directory(path, notice: bool):
