@@ -1,8 +1,10 @@
+from cProfile import label
 from datetime import datetime
 from pathlib import Path
 
 import json
 import os
+from turtle import st
 import requests
 import twitter
 
@@ -38,15 +40,24 @@ logger = []
 fail_logger = []
 url_history = []
 
+def remove_if_present(list: list, target: str):
+    if target in list:
+        list.remove(target)
 
-def get_status_info_from_url(url: str):
+def get_status_info_from_url(url: str) -> tuple:
     split_url = url.split("/")
+    remove_if_present(split_url, "photo")
+    remove_if_present(split_url, "1")
+    remove_if_present(split_url, "2")
+    remove_if_present(split_url, "3")
+    remove_if_present(split_url, "4")
     status_id = split_url.pop(len(split_url) - 1)
     user_id = split_url.pop(len(split_url) - 2)
+
     return f"@{user_id}", status_id.split("?")[0]
 
 
-def open_input():
+def open_input() -> dict:
     url_input = Path("input.json")
 
     if Path(url_input).exists():
@@ -59,7 +70,7 @@ def open_input():
     return json.loads(data)
 
 
-def open_dev_input():
+def open_dev_input() -> dict:
     url_input = Path("test_input.json")
 
     if Path(url_input).exists():
@@ -72,7 +83,7 @@ def open_dev_input():
     return json.loads(data)
 
 
-def get_folders_in_input():
+def get_folders_in_input() -> tuple:
     json_file = open_dev_input()
 
     for (folder, url) in json_file.items():
@@ -162,7 +173,7 @@ def create_directory(path, notice: bool):
     final_path = Path(path)
 
     try:
-        os.mkdir(final_path)
+        os.makedirs(final_path)
     except FileExistsError:
         if notice:
             print(f'"{final_path}" already exists, doing nothing.')

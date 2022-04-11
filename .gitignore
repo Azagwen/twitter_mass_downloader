@@ -2,3 +2,4 @@ logs/
 tokens.json
 venv/
 .idea/
+output/
