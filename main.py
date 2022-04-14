@@ -1,15 +1,13 @@
-from cProfile import label
 from datetime import datetime
 from pathlib import Path
 
 import json
 import os
-from turtle import st
 import requests
 import twitter
 
 
-# TODO: fix externally hosted videos being incorrectly encoded
+# TODO: fix externally hosted videos being incorrectly encoded (Fixed I think ? I forgot lol)
 # Issue root : proxy videos
 # possible solution : https://stackoverflow.com/questions/32145166/get-video-from-tweet-using-twitter-api
 
@@ -40,11 +38,13 @@ logger = []
 fail_logger = []
 url_history = []
 
-def remove_if_present(list: list, target: str):
-    if target in list:
-        list.remove(target)
 
-def get_status_info_from_url(url: str) -> tuple:
+def remove_if_present(input_list: list, target: str):
+    if target in input_list:
+        input_list.remove(target)
+
+
+def get_status_and_author_from_url(url: str) -> tuple:
     split_url = url.split("/")
     remove_if_present(split_url, "photo")
     remove_if_present(split_url, "1")
@@ -65,7 +65,7 @@ def open_input() -> dict:
             data = f.read()
     else:
         print("input.json not found.")
-        return
+        return dict()
 
     return json.loads(data)
 
@@ -78,7 +78,7 @@ def open_dev_input() -> dict:
             data = f.read()
     else:
         print("test_input.json not found.")
-        return
+        return dict()
 
     return json.loads(data)
 
@@ -91,28 +91,15 @@ def get_folders_in_input() -> tuple:
 
 
 def download_images_v2(input_data):
-    target_folder = input_data[0]
     url = input_data[1]
-    folder_list = input_data[2]
-    current_folder = ""
-    matched = ""
-    path = Path("output")
+    current_status = ""
+    media_index = 0
 
-    for f_id in folder_list:
-        if f_id == target_folder:
-            current_folder = folder_list[f_id]
-            matched = f"Matched ( {f_id}: {folder_list[f_id]} ), "
-            break
-
-    current_status = get_status_info_from_url(url)
-    if not current_folder.__contains__("__none__") and current_folder != "":
-        full_path = f"{path}/{current_folder}"
-        create_directory(
-            path=full_path,
-            notice=False
-        )
-    else:
-        full_path = path
+    if isinstance(url, str):
+        current_status = get_status_and_author_from_url(url)
+    elif isinstance(url, dict):
+        current_status = get_status_and_author_from_url(url["url"])
+        media_index = url["media_index"]
 
     try:
         tweet_json = json.loads(api.GetStatus(current_status[1]).AsJsonString())
@@ -130,35 +117,78 @@ def download_images_v2(input_data):
     else:
         tweet_media = tweet_json["media"]
 
-        i = 0
-        for m in tweet_media:
-            author_name = f"{current_status[0]}_{current_status[1]}_0{str(i).zfill(1)}"
+        if isinstance(url, str):
+            index = 0
+            for media_data in tweet_media:
+                wirte_media(input_data, current_status, index, media_data, False)
+                url_history.append(url)
+                index += 1
+        elif isinstance(url, dict):
+            wirte_media(input_data, current_status, media_index, tweet_media[media_index - 1], True)
 
-            if "video_info" in m:
-                tweet_media = m["video_info"]["variants"][0]["url"]
-            else:
-                tweet_media = m["media_url_https"]
 
-            media = requests.get(tweet_media)
+def wirte_media(input_data: tuple, current_status: tuple, index: int, media_data: dict, is_forced_index: bool):
+    target_folder = input_data[0]
+    folder_list = input_data[2]
+    current_folder = ""
+    matched = ""
+    path = Path("output")
+    author_name = f"{current_status[0]}_{current_status[1]}_0{str(index).zfill(1)}"
 
-            if str(tweet_media).__contains__(".jpg"):
-                extension = "jpg"
-            elif str(tweet_media).__contains__(".png"):
-                extension = "png"
-            elif str(tweet_media).__contains__(".mp4"):
-                extension = "mp4"
-            elif str(tweet_media).__contains__(".gif"):
-                extension = "gif"
-            else:
-                extension = "txt"
+    # Check the folder list to see if the folder our URL has to go into has a variable for it.
+    # Might get slow if user has a lot of folder variables
+    for folder in folder_list:
+        # Match found, the target folder is already defined, so we get its full ame and move on
+        if folder == target_folder:
+            current_folder = folder_list[folder]
+            matched = f"Matched ( {folder}: {folder_list[folder]} ), "
+            break
+        # No Match found, the target folder is set as the destination by default
+        current_folder = target_folder
 
-            with open(f"{full_path}/{author_name}.{extension}", 'wb') as f:
-                f.write(media.content)
+    # Check if the folder name is forcefully undefined, dump in output folder if True
+    if "__none__" not in current_folder and current_folder != "":
+        output_path = f"{path}/{current_folder}"
+        create_directory(
+            path=output_path,
+            notice=False
+        )
+    else:
+        output_path = path
 
-            print(f"{matched}{current_folder}/, {tweet_media}, {author_name}")
-            logger.append(f"{tweet_media}, {author_name}")
-            url_history.append(url)
-            i = i + 1
+    # Check if media data is of a video, if not, grab the image key instead
+    if "video_info" in media_data:
+        tweet_media = media_data["video_info"]["variants"][0]["url"]
+    else:
+        tweet_media = media_data["media_url_https"]
+
+    # Determine the media's extension
+    if ".jpg" in tweet_media:
+        extension = "jpg"
+    elif ".png" in tweet_media:
+        extension = "png"
+    elif ".mp4" in tweet_media:
+        extension = "mp4"
+    elif ".gif" in tweet_media:
+        extension = "gif"
+    else:
+        extension = "txt"
+
+    # Write the media file
+    with open(f"{output_path}/{author_name}.{extension}", 'wb') as f:
+        f.write(requests.get(tweet_media).content)
+
+    # Print sucess statement
+    forced_index_str = ""
+    if is_forced_index:
+        v = "th"
+        if index == 1:
+            v = "st"
+        elif index == 2:
+            v = "nd"
+        forced_index_str = f", {index + 1}{v} media"
+    print(f"{matched}{current_folder}/{forced_index_str}, {tweet_media}, {author_name}")
+    logger.append(f"{tweet_media}, {author_name}")
 
 
 def multi_download_images(input_data):
@@ -166,7 +196,7 @@ def multi_download_images(input_data):
         for (url) in data[1]:
             if data[0] != "__comment" and data[0] != "folder_list":
                 folder_list = json.loads(str(input_data["folder_list"]).replace("\'", "\""))
-                download_images_v2((str(data[0]), str(url), folder_list))
+                download_images_v2((str(data[0]), url, folder_list))
 
 
 def create_directory(path, notice: bool):
